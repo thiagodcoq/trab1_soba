@@ -51,3 +51,10 @@ void big_val(BigInt res, long val) {
     }
 }
 
+unsigned short carry = 1; // começa em 1 por causa do "+1" do complemento a 2
+
+    for (int i = 0; i < 16; i++) {
+        unsigned short temp = (unsigned short)(~a[i]) + carry;
+        res[i] = (unsigned char)(temp & 0xFF);
+        carry = (temp >> 8) & 1; // se passou de 255, vai 1 para o próximo byte
+    }
