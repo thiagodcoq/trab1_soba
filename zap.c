@@ -35,19 +35,19 @@ int main(void) {
 }
 
 void big_val(BigInt res, long val) {
-    unsigned long u = (unsigned long) val;  // para extrair bytes sem sinal
+    unsigned long u = (unsigned long) val;  // leitura sem sinal
     int L = (int)sizeof(long);
-    if (L > 16) L = 16; // por segurança, embora não deva acontecer
 
-    // bytes menos significativos (little-endian)
-    for (int i = 0; i < L; i++) {
-        res[i] = (unsigned char)(u & 0xFFu);
+    // copia os bytes que cabem no long
+    for (int i = 0; i < L && i < 16; i++) {
+        res[i] = (unsigned char)(u & 0xFF);
         u >>= 8;
     }
 
-    // extensão de sinal manual para completar 128 bits
+    // completa os bytes restantes com extensão de sinal
     unsigned char fill = (val < 0) ? 0xFF : 0x00;
     for (int i = L; i < 16; i++) {
         res[i] = fill;
     }
 }
+
