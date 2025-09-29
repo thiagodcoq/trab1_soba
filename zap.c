@@ -33,3 +33,21 @@ int main(void) {
     printf("Atribuicao(-2): %s\n",  test_atribuicao(-2,  menos2) ? "OK" : "FALHA");
     return 0;
 }
+
+void big_val(BigInt res, long val) {
+    unsigned long u = (unsigned long) val;  // para extrair bytes sem sinal
+    int L = (int)sizeof(long);
+    if (L > 16) L = 16; // por segurança, embora não deva acontecer
+
+    // bytes menos significativos (little-endian)
+    for (int i = 0; i < L; i++) {
+        res[i] = (unsigned char)(u & 0xFFu);
+        u >>= 8;
+    }
+
+    // extensão de sinal manual para completar 128 bits
+    unsigned char fill = (val < 0) ? 0xFF : 0x00;
+    for (int i = L; i < 16; i++) {
+        res[i] = fill;
+    }
+}
