@@ -51,10 +51,23 @@ void big_val(BigInt res, long val) {
     }
 }
 
-unsigned short carry = 1; // começa em 1 por causa do "+1" do complemento a 2
+void big_comp2(BigInt res, BigInt a) {
+    unsigned short carry = 1; // começa com 1 (o +1 do complemento de dois)
+
+    printf("== DEBUG big_comp2 ==\n");
 
     for (int i = 0; i < 16; i++) {
         unsigned short temp = (unsigned short)(~a[i]) + carry;
         res[i] = (unsigned char)(temp & 0xFF);
-        carry = (temp >> 8) & 1; // se passou de 255, vai 1 para o próximo byte
+        carry = (temp >> 8) & 1;
+
+        printf("Byte[%2d]: a=%02X ~a=%02X temp=%03X res=%02X carry=%d\n",
+               i, a[i], (unsigned char)~a[i], temp, res[i], carry);
     }
+
+    printf("Resultado final: ");
+    for (int i = 15; i >= 0; i--) {
+        printf("%02X", res[i]);
+    }
+    printf("\n\n");
+}
